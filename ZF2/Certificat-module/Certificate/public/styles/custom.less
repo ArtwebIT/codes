@@ -1,0 +1,204 @@
+@import "variables.less"; 
+@import "mixins.less";
+
+body {
+    &.wait, &.wait * {
+        cursor: wait !important;  
+    }
+}
+
+.datepicker {
+    table {
+        tr {
+            td {
+                cursor: pointer;
+
+                &.disabled {
+                    color: #999999;
+                }
+            }
+        }
+    } 
+}
+
+.flash-messages {
+    .alert {
+        margin-top: 20px;
+
+        & > ul {
+            margin-top: 0;
+        }
+    }
+}
+
+.toggle-organization-approve {
+    &:hover, &:focus {
+        text-decoration: none;
+        outline: none;
+    }
+
+    & > * {
+        display: none;
+    }
+
+    & > .active {
+        display: inherit;
+    }
+
+    &.disabled span {
+        color: @gray-light;
+    }
+}
+
+.group-edit-box {
+    &.competence-category-new {
+        font-family: 'Open Sans Condensed', sans-serif;
+        font-weight: bold;
+        text-transform: uppercase;
+        width: 300px;
+        padding: 10px;
+        input {
+            margin-bottom: 10px;
+        }
+        .actions {
+            .btn {
+                margin-left: 10px;
+            }
+        }
+    }
+}
+
+.input-group + .error.after-input-group,
+.form-control.error + .chosen-container + label.error,
+.form-control.error + label.error {
+    color: @secondary-color;
+    font-size: 12px;
+}
+
+.float-none {
+    float: none !important;
+}
+
+#certificate-participant-table {
+    .form-inline-editing .input-group,
+    .participant-edit-value > .input-group,
+    .participant-edit-value > .form-control {
+        margin-top: 0;
+    }
+
+    .form-inline-editing .input-group {
+        max-width: 240px;
+    }
+
+    .participant-current-value,
+    .default-actions,
+    .edit-actions {
+        padding: 5px 0;
+    }
+
+    .popover-content {
+        .comment-actions {
+            .btn {
+                float: right;
+                margin-left: 10px;
+            }
+        }
+    }
+}
+
+.participants-import-row {
+    .btn {
+        margin-bottom: 10px;
+    }
+
+    #import-counts {
+        margin-bottom: 10px;
+        margin-right: 10px;
+    }    
+}
+
+#organization-users-table {
+    margin-bottom: 0;
+
+    .form-control-static {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+}
+
+#user-avatar-img,
+#organization-logo-img {
+    max-height: 200px;
+    
+    img {
+        max-height: 200px;
+    }
+}
+
+.user-box {
+    .user-box-menu {
+        position: inherit;
+        top: auto;
+        left: auto;
+        margin-top: 5px;
+    }
+    
+    .profile-picture {
+        img {
+            max-height: 80px;
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    .title-bar {
+        .title {
+            h2 {
+                padding-left: 0px;
+                margin-bottom: 20px;
+            }
+        }
+        .actions {
+            .btn {
+                float: left;
+                margin: 0 10px 20px 0px;
+            }
+        }
+    }           
+}
+
+// In the end of file for fix syntax highlighting 
+.competence-container {
+    .accordion {
+        .panel {           
+            & + .panel {
+                margin-top: 0;
+            }    
+
+            &:not(.hide) + .panel {
+                margin-top: 10px;
+            }            
+
+            &.custom {
+                .panel-body {
+                    .competence-translation {
+                        color: @third-color;
+                        input {
+                            .placeholder({
+                                color: @third-color-light-x2;
+                            });
+                        }
+                    }
+                }        
+            }             
+        }        
+    }    
+
+    .page-actions {
+        margin-bottom: 24px;
+
+        .btn {
+            margin: 5px 0;
+        }
+    }
+}

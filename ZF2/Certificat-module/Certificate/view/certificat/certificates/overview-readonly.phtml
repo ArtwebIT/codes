@@ -1,0 +1,131 @@
+<?php
+$this->headTitle($title);
+
+// Set description of certificate
+$description = ($certificate->description) ? $certificate->description : $template->additional_comment;
+?>
+<div class="container">
+    <div class="row title-bar">
+        <div class="col-sm-7 col-md-7 title">
+            <h2><?php echo $title; ?></h2>
+        </div>
+        <div class="col-sm-5 col-md-5 actions">
+            <?php if ($certificate->status == \Certificat\Model\Certificate::STATUS_COMPLETED): ?>
+                <a href="#" class="btn btn-primary btn-lg go-with-confirm" 
+                   data-href="<?php echo $this->url('ce/certificates', array('action' => 'archive', 'id' => $certificate->id)) ?>"
+                   data-confirm-text="<?php echo $this->translate('Are you sure?'); ?>">
+                       <?php echo $this->translate('Archive'); ?>
+                </a>
+            <?php endif; ?>
+            <a href="<?php echo $this->url('ce/certificates') ?>" class="btn btn-default btn-lg">
+                <?php echo $this->translate('Close'); ?>
+            </a>
+        </div>
+    </div>
+    <div class="box-title"><?php echo $this->translate('Details'); ?></div>
+    <div class="panel panel-default panel-lg">
+        <div class="panel-body table-responsive">
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="vertical-form">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <p><strong><?php echo $this->translate('Name'); ?></strong></p>
+                                    <p><?php echo $certificate->name; ?></p>
+                                </div>
+                                <div class="form-group">
+                                    <p><strong><?php echo $this->translate('Template'); ?></strong></p>
+                                    <p><?php echo $certificate->template_name; ?></p>                    
+                                </div>
+                                <div class="form-group-value">
+                                    <p><strong><?php echo $this->translate('Status'); ?></strong></p>
+                                    <p class="text-capitalize"><?php echo $certificate->status; ?></p>
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-md-offset-1">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <p><strong><?php echo $this->translate('Duration (hours)'); ?></strong></p>
+                                            <p><?php echo $certificate->duration; ?></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <p><strong><?php echo $this->translate('Language'); ?></strong></p>
+                                            <p><?php echo $this->language($certificate->language); ?></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <p><strong><?php echo $this->translate('Start date'); ?></strong></p>
+                                            <p><?php echo date('d-m-Y', strtotime($certificate->start_date)); ?></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <p><strong><?php echo $this->translate('End date'); ?></strong></p>
+                                            <p><?php echo date('d-m-Y', strtotime($certificate->end_date)); ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php if ($description): ?>
+                            <div class="form-group">
+                                <p><strong><?php echo $this->translate('Description'); ?></strong></p>
+                                <p><?php echo nl2br($description); ?></p>
+                            </div>
+                        <?php endif; ?>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box-title"><?php echo $this->translate('Participants'); ?></div>
+    <div class="panel panel-default">
+        <div class="panel-body table-responsive vertical-form">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th><?php echo $this->translate('First name'); ?></th>
+                        <th><?php echo $this->translate('Last name'); ?></th>
+                        <th><?php echo $this->translate('E-mail'); ?></th>
+                        <th><?php echo $this->translate('Birth date'); ?></th>
+                        <th style="min-width:60px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (count($participants) > 0): ?>
+                        <?php foreach ($participants as $key => $participant): ?>  
+                            <tr>
+                                <td><?php echo $participant['first_name']; ?></td>
+                                <td><?php echo $participant['last_name']; ?></td>
+                                <td><?php echo $participant['email']; ?></td>
+                                <td><?php echo ($participant['birthday']) ? date('d-m-Y', strtotime($participant['birthday'])) : ''; ?></td>
+                                <td class="actions">
+                                    <a class="pull-right" title="<?php echo $this->translate('Download certificate'); ?>" target="_blank"
+                                       href="<?php echo $this->url('ce/download-certificate', array('id' => $participant['id'])) ?>">
+                                        <span class="ico ico--document"></span>
+                                    </a>
+                                    <?php if (isset($participant['comment'])): ?>
+                                        <a href="#" title="<?php echo $this->translate('Comment'); ?>" class="pull-right"
+                                           data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
+                                           data-content="<?php echo $participant['comment']; ?>">
+                                            <span class="ico glyphicon glyphicon-comment"></span>
+                                        </a>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="5" class="text-center"><?php echo $this->translate('There are no participants'); ?>.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

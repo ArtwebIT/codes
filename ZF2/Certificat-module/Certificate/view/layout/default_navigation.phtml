@@ -1,0 +1,28 @@
+<?php
+$i = 1;
+?>
+
+<?php foreach ($this->container as $page): ?>
+    <?php if ($page->isVisible() && $this->navigation()->accept($page)): ?>  
+
+        <?php
+        $liClasses = array();
+        if ($i == 1) {
+            $liClasses[] = 'first';
+        }
+        if ($i == count($this->container)) {
+            $liClasses[] = 'last';
+        }
+        if ($page->isActive()) {
+            $liClasses[] = 'active';
+        }
+        $i++;
+        ?>
+
+        <li<?php echo (count($liClasses) > 0) ? ' class="' . implode(' ', $liClasses) . '"' : '' ?>>
+            <a href="<?php echo $page->getHref(); ?>" title="<?php echo $this->translate($page->getLabel()); ?>">
+                <?php echo $this->translate($page->getLabel()); ?>
+            </a>
+        </li>
+    <?php endif; ?>
+<?php endforeach; ?>    

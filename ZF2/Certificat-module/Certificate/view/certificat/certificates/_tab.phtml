@@ -1,0 +1,61 @@
+<div role="tabpanel" class="tab-pane <?php if ($tabIsActive): ?> active<?php endif; ?>" id="<?php echo $tabId; ?>">
+    <div class="filter-bar">
+        <form class="form-inline">
+            <div class="form-group">
+                <input type="search" class="form-control input-sm datatable-search"
+                       placeholder="<?php echo $this->translate('Name, Status'); ?>..." />
+            </div>
+            <div class="form-group">
+                <label for="certificiates-from-filter"><?php echo $this->translate('From'); ?></label>
+                <div class="input-group">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+                    <input id="certificiates-from-filter" class="form-control input-sm datepicker" 
+                           type="text" data-date-format="dd/mm/yyyy" placeholder="<?php echo $this->translate('From'); ?>"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="certificiates-to-filter"><?php echo $this->translate('to'); ?></label>
+                <div class="input-group">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+                    <input id="certificiates-to-filter" class="form-control input-sm datepicker" 
+                           type="text" data-date-format="dd/mm/yyyy" placeholder="<?php echo $this->translate('To'); ?>"/>
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table table-striped display certificate-list-table">
+        <thead>
+            <tr>
+                <th><?php echo $this->translate('Name'); ?></th>
+                <th><?php echo $this->translate('Status'); ?></th>
+                <th><?php echo $this->translate('Template'); ?></th>
+                <th><?php echo $this->translate('Participants'); ?></th>
+                <th><?php echo $this->translate('Creation date'); ?></th>
+                <th><?php echo $this->translate('Language'); ?></th>
+                <th><?php echo $this->translate('Author'); ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (count($certificates) > 0): ?>
+                <?php foreach ($certificates as $certificate): ?>
+                    <tr>
+                        <th scope="row">
+                            <a href="<?php echo $this->url('ce/certificates', array('action' => 'overview', 'id' => $certificate['id'])); ?>" 
+                               title="<?php echo $certificate['name']; ?>">
+                                   <?php echo $certificate['name']; ?>
+                            </a>
+                        </th>
+                        <td class="text-capitalize<?php echo ($certificate['status'] == \Certificat\Model\Certificate::STATUS_COMPLETED) ? ' text-success' : ''; ?>">
+                            <?php echo $certificate['status']; ?>
+                        </td>
+                        <td><?php echo $certificate['template_name']; ?></td>
+                        <td><?php echo $certificate['participant_count']; ?></td>
+                        <td><?php echo date('d-m-Y', strtotime($certificate['created'])); ?></td>
+                        <td><?php echo $this->language($certificate['language']); ?></td>
+                        <td><?php echo $certificate['user_first_name']; ?> <?php echo $certificate['user_last_name']; ?></td>
+                    </tr>                        
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>

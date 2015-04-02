@@ -1,0 +1,85 @@
+<?php
+$empty = !isset($participant); // Is empty row?
+$rowId = ($empty) ? 'id="empty-participant"' : '';
+$rowClass = ($empty) ? 'class="participant-row hide"' : 'class="participant-row"';
+$dataRowKey = (!$empty) ? 'data-row-key="' . $key . '"' : '';
+?>
+<tr <?php echo $rowId; ?> <?php echo $rowClass; ?> <?php echo $dataRowKey; ?>>
+    <td class="first_name_column">
+        <div class="participant-current-value"><?php echo (!$empty) ? $participant['first_name'] : ''; ?></div>
+        <div class="participant-edit-value hide">
+            <input class="form-control input-sm" data-rule-required="1" data-rule-nohtml="1"  type="text"
+                   <?php if (!$empty): ?> name="participant[<?php echo $key; ?>][first_name]" value="<?php echo $participant['first_name']; ?>" <?php endif; ?>
+                   />
+        </div>
+    </td>
+    <td class="last_name_column">
+        <div class="participant-current-value"><?php echo (!$empty) ? $participant['last_name'] : ''; ?></div>
+        <div class="participant-edit-value hide">
+            <input class="form-control input-sm" data-rule-required="1" data-rule-nohtml="1"  type="text"
+                   <?php if (!$empty): ?>name="participant[<?php echo $key; ?>][last_name]" value="<?php echo $participant['last_name']; ?>"<?php endif; ?>
+                   />       
+        </div>
+    </td>
+    <td class="email_column">
+        <div class="participant-current-value"><?php echo (!$empty) ? $participant['email'] : ''; ?></div>
+        <div class="participant-edit-value hide">
+            <input data-rule-nohtml="1" class="form-control input-sm" data-rule-required="1" unique="participant-email" type="email"
+                   <?php if (!$empty): ?> name="participant[<?php echo $key; ?>][email]" value="<?php echo $participant['email']; ?>" <?php endif; ?> 
+                   />
+        </div>
+    </td>
+    <td class="birthday_column">
+        <div class="participant-current-value"><?php echo (!$empty && $participant['birthday']) ? date('d/m/Y', strtotime($participant['birthday'])) : ''; ?></div>
+        <div class="participant-edit-value hide">
+            <div class="input-group">
+                <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+                <input class="form-control input-sm datepicker" type="text" data-date-format="dd/mm/yyyy" data-rule-nohtml="1"
+                       <?php if (!$empty): ?> name="participant[<?php echo $key; ?>][birthday]" value="<?php echo ($participant['birthday']) ? date('d/m/Y', strtotime($participant['birthday'])) : ''; ?>"<?php endif; ?>
+                       />
+            </div>
+        </div>
+    </td>
+    <td class="actions">
+        <div class="default-actions">
+            <a href="#" title="<?php echo $this->translate('Edit'); ?>" class="pull-right edit-participant">
+                <span class="ico glyphicon glyphicon-edit"></span>
+            </a>
+            <a href="#" title="<?php echo $this->translate('Delete'); ?>" class="pull-right delete-participant"
+               data-confirm-text="<?php echo $this->translate('Are you sure?'); ?>">
+                <span class="ico ico--delete"></span>
+            </a>
+            <a href="#" title="<?php echo $this->translate('Preview certificate'); ?>" class="pull-right preview-participant-certificate"
+               data-href="<?php echo $this->url('ce/preview-certificate'); ?>">
+                <span class="ico ico--document"></span>
+            </a>
+            <a href="#" title="<?php echo $this->translate('Add comment'); ?>" 
+               class="add-participant-comment pull-right <?php echo (!$empty && !empty($participant['comment'])) ? ' text-success' : '' ?>">
+                <span class="ico glyphicon glyphicon-comment"></span>
+            </a>
+            <div class="popover-content hide">
+                <div class="form-group">
+                    <textarea class="form-control" data-rule-nohtml="1" 
+                              <?php if (!$empty): ?>name="participant[<?php echo $key; ?>][comment]"<?php endif; ?>
+                              ><?php echo (!$empty) ? $participant['comment'] : ''; ?></textarea>
+                </div>
+                <div class="comment-actions clearfix">
+                    <button class="btn btn-primary close-participant-comment save" type="button">
+                        <?php echo $this->translate('Save'); ?>
+                    </button>
+                    <button class="btn btn-default close-participant-comment cancel" type="button">
+                        <?php echo $this->translate('Cancel'); ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="edit-actions hide">
+            <a href="#" title="<?php echo $this->translate('Cancel'); ?>" class="pull-right close-edit-participant cancel">
+                <span class="ico glyphicon glyphicon-remove"></span>
+            </a>
+            <a href="#" title="<?php echo $this->translate('Save'); ?>" class="pull-right close-edit-participant save">
+                <span class="ico glyphicon glyphicon-ok text-success"></span>
+            </a>
+        </div>
+    </td>
+</tr>

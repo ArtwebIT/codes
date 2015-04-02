@@ -1,0 +1,90 @@
+<?php
+$addressLine = "{$organization['house']}, {$organization['street']}, ";
+$addressLine .= "{$organization['zip_code']}, {$organization['city']}, ";
+$addressLine .= $this->country($organization['country']);
+
+$persons_in_charge = array();
+if ($template['persons_in_charge']) {
+    $persons_in_charge = json_decode($template['persons_in_charge']);
+}
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            .organization-logo {
+                max-height: 250px;
+                max-width: 250px;
+            }
+        </style>
+    </head>
+    <body>
+        <table>
+            <tbody>
+                <tr>
+                    <td width="250" style="text-align: center;">
+                        <?php if ($organization['logo_id']): ?>
+                            <img class="organization-logo"
+                                 src="<?php echo $this->serverUrl($this->url('ce/files', array('action' => 'show', 'id' => $organization['logo_id']))); ?>" />
+                        <?php else: ?>
+                            <img src="<?php echo $publicDir . '/images/logo-certificat.png'; ?>" width="250"/>
+                        <?php endif; ?>
+                    </td>
+                    <td><h2><?php echo $organization['name']; ?></h2></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p><?php echo $this->translate('Address'); ?>: <?php echo $addressLine; ?></p>
+
+        <?php if ($organization['phone']): ?>
+            <p><?php echo $this->translate('Phone'); ?>: <?php echo $organization['phone']; ?></p>
+        <?php endif; ?>
+
+        <?php if ($organization['website']): ?>
+            <p><?php echo $this->translate('Website'); ?>: <?php echo $organization['website']; ?></p>
+        <?php endif; ?>     
+
+        <p><?php echo sprintf($this->translate('hereby confirm %s the participation in the continuous function as'), "{$participant['first_name']} {$participant['last_name']}"); ?></p>
+
+        <h1><?php echo $certificate['name']; ?></h1>
+
+        <?php if ($certificate['description']): ?>
+            <p><?php echo nl2br($certificate['description']); ?></p>
+        <?php endif; ?>            
+
+        <?php if (count($competenceCategories) > 0): ?>
+            <p><?php echo $this->translate('The following skills were promoted during this activity:'); ?>:</p>
+            <ul>
+                <?php foreach ($competenceCategories as $category): ?>
+                    <?php foreach ($category['options'] as $competence): ?>
+                        <li><?php echo $competence; ?></li>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+
+        <?php if ($participant['comment']): ?>
+            <p><?php echo nl2br($participant['comment']); ?></p>
+        <?php endif; ?>  
+
+        <ul>
+            <?php if (count($persons_in_charge) > 0): ?>
+                <?php foreach ($persons_in_charge as $person): ?>
+                    <li>
+                        <?php echo $person->name; ?>
+                        <?php if ($person->function): ?> 
+                            (<?php echo $person->function; ?>)
+                        <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <li><?php echo $organizationAdmin['first_name']; ?> <?php echo $organizationAdmin['last_name']; ?></li>
+            <?php endif; ?>
+        </ul>
+
+        <p><?php echo $this->translate('Date of issue'); ?>: <?php echo $certificate['end_date']; ?></p>
+        <p><?php echo $organization['name']; ?></p>
+    </body>
+</html>

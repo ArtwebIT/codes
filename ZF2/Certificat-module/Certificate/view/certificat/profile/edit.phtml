@@ -1,0 +1,229 @@
+<?php
+$userRole = $this->layout()->userRole;
+$title = $this->translate('User profile');
+$this->headTitle($title);
+?>
+<div class="container">
+    <?php
+    $form->setAttribute('action', $this->url('ce/my-profile', array('action' => 'save')));
+    $form->setAttribute('class', 'jq-validate vertical-form');
+    $form->prepare();
+
+    echo $this->form()->openTag($form);
+    ?>       
+    <div class="row title-bar">
+        <div class="col-sm-7 col-md-9 title">
+            <h2><?php echo $title; ?></h2>
+        </div>
+        <div class="col-sm-5 col-md-3 actions">
+            <?php
+            echo $this->formElement($form->get('submit')
+                            ->setAttributes(array(
+                                'class' => 'btn btn-primary btn-lg',
+                                'value' => $this->translate('Save')
+            )));
+            ?>
+            <a href="<?php echo $this->url('ce/my-profile'); ?>" class="btn btn-default btn-lg">
+                <?php echo $this->translate('Cancel'); ?>
+            </a>
+        </div>
+    </div>
+    <div class="panel panel-default panel-lg">
+        <div class="panel-body table-responsive">
+            <div class="row">              
+                <div id="user-profile-pwd-container" class="col-sm-5">                   
+                    <div class="form-group">
+                        <label for="user-profile-first-name"><?php echo $this->translate('First name'); ?></label>
+                        <?php
+                        echo $this->formElement($form->get('first_name')
+                                        ->setAttributes(array(
+                                            'id' => 'user-profile-first-name',
+                                            'class' => 'form-control',
+                                            'placeholder' => $this->translate('First name')
+                        )));
+                        ?>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-profile-last-name"><?php echo $this->translate('Last name'); ?></label>
+                        <?php
+                        echo $this->formElement($form->get('last_name')
+                                        ->setAttributes(array(
+                                            'id' => 'user-profile-last-name',
+                                            'class' => 'form-control',
+                                            'placeholder' => $this->translate('Last name')
+                        )));
+                        ?>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-profile-sex"><?php echo $this->translate('Sex'); ?></label>
+                        <?php
+                        echo $this->formElement($form->get('sex')->setAttributes(array(
+                                    'id' => 'user-profile-sex',
+                                    'class' => 'form-control'
+                        )));
+                        ?>
+                    </div>
+                    <?php if ($userRole == 'participant'): ?>
+                        <div class="form-group">
+                            <label for="user-profile-address"><?php echo $this->translate('Address'); ?></label>
+                            <?php
+                            echo $this->formElement($form->get('address')->setAttributes(array(
+                                        'id' => 'user-profile-address',
+                                        'class' => 'form-control',
+                                        'placeholder' => $this->translate('Street & house number')
+                            )));
+                            ?>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <?php
+                                    echo $this->formElement($form->get('zip_code')->setAttributes(array(
+                                                'id' => 'user-profile-zip-code',
+                                                'class' => 'form-control',
+                                                'placeholder' => $this->translate('Zip code')
+                                    )));
+                                    ?>
+                                </div>
+                                <div class="col-md-8">
+                                    <?php
+                                    echo $this->formElement($form->get('city')->setAttributes(array(
+                                                'id' => 'user-profile-city',
+                                                'class' => 'form-control',
+                                                'placeholder' => $this->translate('City')
+                                    )));
+                                    ?>
+                                </div>
+                            </div>
+                        </div>    
+                        <div class="form-group">
+                            <label for="user-profile-country"><?php echo $this->translate('Country'); ?></label>
+                            <?php
+                            echo $this->formElement($form->get('country')->setAttributes(array(
+                                        'id' => 'user-profile-country',
+                                        'class' => 'form-control'
+                            )));
+                            ?>
+                        </div>                    
+                    <?php endif; ?>
+
+                    <div class="form-group">
+                        <label for="user-profile-email"><?php echo $this->translate('E-Mail'); ?></label>
+                        <p class="form-control-static"><?php echo $user->email; ?></p>
+                    </div>    
+
+                    <?php if ($userRole == 'participant'): ?>
+                        <div class="form-group">
+                            <label for="user-profile-date-of-birth"><?php echo $this->translate('Birth date'); ?></label>
+                            <div class="input-group">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+                                <?php
+                                echo $this->formElement($form->get('date_of_birth')->setAttributes(array(
+                                            'value' => ($user->date_of_birth) ? date('d/m/Y', strtotime($user->date_of_birth)) : '',
+                                            'id' => 'user-profile-date-of-birth',
+                                            'class' => 'form-control datepicker',
+                                            'data-date-format' => 'dd/mm/yyyy',
+                                            'placeholder' => $this->translate('Birth date')
+                                )));
+                                ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <h4><?php echo $this->translate('Change password'); ?></h4>
+                    <p><?php echo $this->translate("Leave empty if you don't want to change your password"); ?>.</p>
+                    <div class="form-group">
+                        <label for="user-profile-new-password"><?php echo $this->translate('New password'); ?></label>
+                        <?php
+                        echo $this->formPassword($form->get('password')
+                                        ->setAttributes(array(
+                                            'id' => 'user-profile-new-password',
+                                            'class' => 'form-control pwstrength',
+                                            'placeholder' => $this->translate('New password')
+                        )));
+                        ?>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-profile-password-check"><?php echo $this->translate('New password (confirm)'); ?></label>
+                        <?php
+                        echo $this->formPassword($form->get('password_check')
+                                        ->setAttributes(array(
+                                            'id' => 'user-profile-password-check',
+                                            'class' => 'form-control',
+                                            'placeholder' => $this->translate('Repeat password'),
+                                            'data-rule-equalTo' => '#user-profile-new-password',
+                        )));
+                        ?>
+                    </div> 
+                    <div id="user-profile-pwstrength"></div>
+                </div>
+                <?php if ($userRole == 'participant'): ?>
+                    <div class="col-sm-offset-1 col-sm-5">
+                        <div class="form-group">
+                            <label for="user-profile-image"><?php echo $this->translate('Logo'); ?></label>
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <input type="file" class="form-control ce-file-upload-input" id="user-profile-image" 
+                                           placeholder="<?php echo $this->translate('Upload your photo'); ?>"
+                                           data-empty-text="<?php echo $this->translate('Please choose file to upload'); ?>"
+                                           data-error-text="<?php echo $this->translate('An error has occurred'); ?>" />
+                                </div>
+                                <div class="col-md-3">
+                                    <button id="user-profile-image-btn" class="btn btn-primary form-btn ce-file-upload-btn" type="button"
+                                            data-loading-text="<?php echo $this->translate('Wait'); ?>..." data-target="#user-avatar-img"
+                                            data-href="<?php echo $this->url('ce/files', array('action' => 'upload-avatar')); ?>">
+                                                <?php echo $this->translate('Upload'); ?>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <?php echo $this->userImage($user->photo_id); ?>
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <?php echo $this->form()->closeTag(); ?>
+</div>
+
+<?php
+if ($userRole == 'participant') {
+    echo $this->partial('partials/_crop-modal');
+    $this->headLink()->prependStylesheet($this->basePath() . '/components/imgareaselect/css/imgareaselect-default.css');
+    $this->inlineScript()
+            ->appendFile($this->basePath() . '/components/imgareaselect/scripts/jquery.imgareaselect.min.js')
+            ->appendFile($this->basePath() . '/scripts/jquery.iframe-transport.js')
+            ->appendFile($this->basePath() . '/scripts/app.upload-and-crop.js');
+}
+
+$this->inlineScript()
+        ->appendFile($this->basePath() . '/scripts/pwstrength.js')
+        ->captureStart();
+?>
+//<script>
+    $(function () {
+        "use strict";
+        var options = {
+            ui: {
+                container: "#user-profile-pwd-container",
+                verdicts: [
+                    "<?php echo $this->translate('Weak'); ?>",
+                    "<?php echo $this->translate('Normal'); ?>",
+                    "<?php echo $this->translate('Medium'); ?>",
+                    "<?php echo $this->translate('Strong'); ?>",
+                    "<?php echo $this->translate('Very Strong'); ?>"
+                ],
+                showVerdictsInsideProgressBar: true,
+                viewports: {
+                    progress: "#user-profile-pwstrength"
+                }
+            }
+        };
+        $('#user-profile-new-password').pwstrength(options);
+    });
+//</script>  
+<?php $this->inlineScript()->captureEnd(); ?>

@@ -1,0 +1,481 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-lg panel-default">
+                <div class="panel-heading"><h2 class="block-title"><?php echo $this->translate('Welcome'); ?></h2></div>
+                <div class="panel-body">
+                    <p><strong><?php echo $this->translate('CERTFICAT for PARTICIPANTS'); ?></strong> <?php echo $this->translate('gives users an overview of the skills and certificates that they received when attending training courses, projects or voluntary work. CERTIFICAT can be used together with ePortfolio to add skills to your resume.'); ?></p>
+
+                    <p><strong><?php echo $this->translate('CERTIFICAT for ORGANIZATIONS'); ?></strong> <?php echo $this->translate('is a tool for creating certificates for skills acquired in non-formal sector, for example, developments, projects, or through volunteer activities.'); ?></p>
+                </div>
+            </div><!-- panel -->
+
+            <div class="panel panel-lg panel-default">
+                <div class="panel-heading"><h2 class="block-title"><?php echo $this->translate('Login'); ?></h2></div>
+                <div class="panel-body">
+                    <?php
+                    $loginForm = $this->loginForm;
+                    $loginForm->setAttribute('action', $this->url('ce/login', array('action' => 'authenticate')));
+                    $loginForm->prepare();
+
+                    echo $this->form()->openTag($loginForm);
+                    ?>
+                    <div class="form-group">
+                        <label class="sr-only" for="login-form-email"><?php echo $this->translate('E-mail'); ?></label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><span class="ico ico--mail"></span></div>
+                            <?php
+                            echo $this->formEmail($loginForm->get('email')
+                                            ->setAttributes(array(
+                                                'id' => 'login-form-email',
+                                                'class' => 'form-control input-lg',
+                                                'placeholder' => $this->translate('E-mail')
+                            )));
+                            ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="login-form-password"><?php echo $this->translate('Password'); ?></label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><span class="ico ico--locker"></span></div>
+                            <?php
+                            echo $this->formPassword($loginForm->get('password')
+                                            ->setAttributes(array(
+                                                'id' => 'login-form-password',
+                                                'class' => 'form-control input-lg',
+                                                'placeholder' => $this->translate('Password')
+                            )));
+                            ?>
+                        </div>
+                    </div>
+                    <?php
+                    echo $this->formElement($loginForm->get('submit')
+                                    ->setAttributes(array(
+                                        'id' => 'login-form-submit',
+                                        'class' => 'btn btn-primary btn-lg',
+                                        'value' => $this->translate('Submit')
+                    )));
+                    ?>
+                    <a href="<?php echo $this->url('ce/lost-password'); ?>" title="<?php echo $this->translate('Forgot your password ?'); ?>">
+                        <small><?php echo $this->translate('Forgot your password ?'); ?></small>
+                    </a>
+                    <?php echo $this->form()->closeTag(); ?>
+                </div>
+            </div><!-- panel -->
+
+        </div><!-- col -->
+
+        <div class="col-md-6">
+            <h2 class="block-title"><?php echo $this->translate('Register'); ?></h2>
+            <div role="tabpanel" id="register-tab" class="tab-lg">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation"<?php echo ($openTab != 'organization') ? ' class="active"' : '' ?>>
+                        <a href="#register-participant-tab" 
+                           aria-controls="register-participant-tab" 
+                           role="tab" data-toggle="tab">
+                               <?php echo $this->translate('Participant'); ?>
+                        </a>
+                    </li>
+                    <li role="presentation"<?php echo ($openTab == 'organization') ? ' class="active"' : '' ?>>
+                        <a href="#register-organization-tab" 
+                           aria-controls="register-organization-tab" 
+                           role="tab" data-toggle="tab">
+                               <?php echo $this->translate('Organization'); ?>
+                        </a>
+                    </li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane<?php echo ($openTab != 'organization') ? ' active' : '' ?>" id="register-participant-tab">
+                        <?php
+                        $registerForm = $this->registerForm;
+                        $registerForm->setAttributes(array(
+                            'action' => $this->url('ce/register'),
+                            'class' => 'jq-validate form-horizontal'
+                        ));
+                        $registerForm->prepare();
+
+                        echo $this->form()->openTag($registerForm);
+                        ?>                        
+                        <div class="form-group">
+                            <label for="register-form-name-participant" class="col-sm-3 control-label"><?php echo $this->translate('Name'); ?></label>
+                            <div class="col-sm-9">
+                                <?php
+                                echo $this->formElement($registerForm->get('first_name')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-name-participant',
+                                                    'class' => 'form-control input-lg',
+                                                    'placeholder' => $this->translate('First name')
+                                )));
+                                ?>
+                            </div>
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <?php
+                                echo $this->formElement($registerForm->get('last_name')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-last-name-participant',
+                                                    'class' => 'form-control form-group-multi input-lg',
+                                                    'placeholder' => $this->translate('Last name')
+                                )));
+                                ?>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-form-sex-participant" class="col-sm-3 control-label"><?php echo $this->translate('Sex'); ?></label>
+                            <div class="col-sm-9">
+                                <?php
+                                echo $this->formElement($registerForm->get('sex')->setAttributes(array(
+                                            'id' => 'register-form-sex-participant',
+                                            'class' => 'form-control input-lg'
+                                )));
+                                ?>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-form-email-participant" class="col-sm-3 control-label"><?php echo $this->translate('E-mail'); ?></label>
+                            <div class="col-sm-9">
+                                <?php
+                                echo $this->formEmail($registerForm->get('email')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-email-participant',
+                                                    'class' => 'form-control input-lg',
+                                                    'placeholder' => $this->translate('E-mail')
+                                )));
+                                ?>
+                            </div>
+                        </div>
+                        <div id="participant-pwd-container" class="form-group">
+                            <label for="register-form-password-participant" class="col-sm-3 control-label"><?php echo $this->translate('Password'); ?></label>
+                            <div class="col-sm-9">
+                                <?php
+                                echo $this->formPassword($registerForm->get('password')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-password-participant',
+                                                    'class' => 'form-control input-lg pwstrength',
+                                                    'placeholder' => $this->translate('Password')
+                                )));
+                                ?>
+                            </div>
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <?php
+                                echo $this->formPassword($registerForm->get('password_check')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-repeat-password-participant',
+                                                    'class' => 'form-control form-group-multi input-lg',
+                                                    'placeholder' => $this->translate('Repeat password'),
+                                                    'data-rule-equalTo' => '#register-form-password-participant',
+                                )));
+                                ?>
+                            </div>
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <div id="register-form-pwstrength-participant"></div>
+                            </div>
+                        </div>
+                        <?php
+                        $captchaName = 'captcha'; // This is the name as given in form declaration
+                        $captcha = $registerForm->get($captchaName)->getCaptcha();
+                        $captcha->generate();
+                        ?>
+                        <div class="form-group">
+                            <div class="col-sm-3">
+                                <img class="img-bordered img-captcha" 
+                                     src="<?php echo $captcha->getImgUrl() . $captcha->getId() . $captcha->getSuffix(); ?>" 
+                                     alt="<?php echo $captcha->getImgAlt() ?>">
+                            </div>
+                            <div class="col-xs-10 col-sm-7">
+                                <input type="text" 
+                                       name="<?php echo $captchaName ?>[input]" 
+                                       data-rule-required="true"
+                                       class="form-control input-lg" 
+                                       id="register-form-captcha-participant" 
+                                       placeholder="<?php echo $this->translate('Enter captcha code'); ?>">
+
+                                <input type="hidden" 
+                                       class="captcha-id"
+                                       value="<?php echo $captcha->getId() ?>" 
+                                       name="<?php echo $captchaName ?>[id]">
+                            </div>
+                            <div class="col-xs-2">
+                                <a href="<?php echo $this->url('ce/captcha-reload') ?>" class="reload-captcha">
+                                    <span class="glyphicon glyphicon-refresh"></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <div class="checkbox">
+                                    <label>
+                                        <?php echo $this->formElement($registerForm->get('termsaccept')); ?>                                        
+                                        I agree with the <a href="<?php echo $this->url('ce/terms'); ?>" 
+                                                            target="_blank"
+                                                            title="<?php echo ucfirst($this->translate('terms & conditions')); ?>"
+                                                            ><?php echo $this->translate('terms & conditions'); ?></a>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-group--last">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <?php
+                                echo $this->formElement($loginForm->get('submit')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-submit-participant',
+                                                    'class' => 'btn btn-primary btn-lg',
+                                                    'value' => $this->translate('Register')
+                                )));
+                                ?>
+                            </div>
+                        </div>
+                        <?php echo $this->form()->closeTag(); ?>
+                    </div>
+                    <div role="tabpanel" class="tab-pane<?php echo ($openTab == 'organization') ? ' active' : '' ?>" id="register-organization-tab">
+                        <?php
+                        $registerOrganizationForm = $this->registerOrganizationForm;
+                        $registerOrganizationForm->setAttributes(array(
+                            'action' => $this->url('ce/register-organization'),
+                            'class' => 'jq-validate form-horizontal'
+                        ));
+                        $registerOrganizationForm->prepare();
+
+                        echo $this->form()->openTag($registerOrganizationForm);
+                        ?>                         
+                        <div class="form-group">
+                            <label for="register-form-name-organization" class="col-sm-3 control-label"><?php echo $this->translate('Name'); ?></label>
+                            <div class="col-sm-9">
+                                <?php
+                                echo $this->formElement($registerOrganizationForm->get('name')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-name-organization',
+                                                    'class' => 'form-control input-lg',
+                                                    'placeholder' => $this->translate('Name')
+                                )));
+                                ?>                                  
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-form-address-organization" class="col-sm-3 control-label"><?php echo $this->translate('Address'); ?></label>
+                            <div class="col-sm-6">
+                                <?php
+                                echo $this->formElement($registerOrganizationForm->get('street')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-street-organization',
+                                                    'class' => 'form-control input-lg',
+                                                    'placeholder' => $this->translate('Street')
+                                )));
+                                ?>                                 
+                            </div>
+                            <div class="col-sm-3">
+                                <?php
+                                echo $this->formElement($registerOrganizationForm->get('house')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-number-organization',
+                                                    'class' => 'form-control input-lg',
+                                                    'placeholder' => $this->translate('N°')
+                                )));
+                                ?>                                 
+                            </div>
+                            <div class="col-sm-3 col-sm-offset-3">
+                                <?php
+                                echo $this->formElement($registerOrganizationForm->get('zip_code')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-zip-organization',
+                                                    'class' => 'form-control form-group-multi input-lg',
+                                                    'placeholder' => $this->translate('Zip code')
+                                )));
+                                ?>                                
+                            </div>
+                            <div class="col-sm-6">
+                                <?php
+                                echo $this->formElement($registerOrganizationForm->get('city')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-city-organization',
+                                                    'class' => 'form-control form-group-multi input-lg',
+                                                    'placeholder' => $this->translate('City')
+                                )));
+                                ?>                                
+                            </div>
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <?php
+                                echo $this->formElement($registerOrganizationForm->get('country')->setAttributes(array(
+                                            'id' => 'register-form-country-organization',
+                                            'class' => 'form-control form-group-multi input-lg'
+                                )));
+                                ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <h4><?php echo $this->translate('Administrator'); ?></h4>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-form-name-organization-admin" class="col-sm-3 control-label"><?php echo $this->translate('Name'); ?></label>
+                            <div class="col-sm-9">
+                                <?php
+                                echo $this->formElement($registerOrganizationForm->get('first_name')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-name-organization-admin',
+                                                    'class' => 'form-control input-lg',
+                                                    'placeholder' => $this->translate('First name')
+                                )));
+                                ?>
+                            </div>
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <?php
+                                echo $this->formElement($registerOrganizationForm->get('last_name')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-last-name-organization-admin',
+                                                    'class' => 'form-control form-group-multi input-lg',
+                                                    'placeholder' => $this->translate('Last name')
+                                )));
+                                ?>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-form-sex-organization-admin" class="col-sm-3 control-label"><?php echo $this->translate('Sex'); ?></label>
+                            <div class="col-sm-9">
+                                <?php
+                                echo $this->formElement($registerOrganizationForm->get('sex')->setAttributes(array(
+                                            'id' => 'register-form-sex-organization-admin',
+                                            'class' => 'form-control input-lg'
+                                )));
+                                ?>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-form-email-organization-admin" class="col-sm-3 control-label"><?php echo $this->translate('E-mail'); ?></label>
+                            <div class="col-sm-9">
+                                <?php
+                                echo $this->formEmail($registerOrganizationForm->get('email')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-email-organization-admin',
+                                                    'class' => 'form-control input-lg',
+                                                    'placeholder' => $this->translate('E-mail')
+                                )));
+                                ?>
+                            </div>
+                        </div>
+                        <div id="organization-admin-pwd-container" class="form-group">
+                            <label for="register-form-password-organization-admin" class="col-sm-3 control-label"><?php echo $this->translate('Password'); ?></label>
+                            <div class="col-sm-9">
+                                <?php
+                                echo $this->formPassword($registerOrganizationForm->get('password')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-password-organization-admin',
+                                                    'class' => 'form-control input-lg pwstredngth',
+                                                    'placeholder' => $this->translate('Password')
+                                )));
+                                ?>
+                            </div>
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <?php
+                                echo $this->formPassword($registerOrganizationForm->get('password_check')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-repeat-password-organization-admin',
+                                                    'class' => 'form-control form-group-multi input-lg',
+                                                    'placeholder' => $this->translate('Repeat password'),
+                                                    'data-rule-equalTo' => '#register-form-password-organization-admin',
+                                )));
+                                ?>
+                            </div>
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <div id="register-form-pwstrength-organization-admin"></div>
+                            </div>
+                        </div>
+                        <?php
+                        $captchaName = 'captcha'; // This is the name as given in form declaration
+                        $captcha = $registerOrganizationForm->get($captchaName)->getCaptcha();
+                        $captcha->generate();
+                        ?>
+                        <div class="form-group">
+                            <div class="col-sm-3">
+                                <img class="img-bordered img-captcha" 
+                                     src="<?php echo $captcha->getImgUrl() . $captcha->getId() . $captcha->getSuffix(); ?>" 
+                                     alt="<?php echo $captcha->getImgAlt() ?>">
+                            </div>
+                            <div class="col-xs-10 col-sm-7">
+                                <input type="text" 
+                                       name="<?php echo $captchaName ?>[input]" 
+                                       data-rule-required="true"
+                                       class="form-control input-lg" 
+                                       id="register-form-captcha-participant" 
+                                       placeholder="<?php echo $this->translate('Enter captcha code'); ?>">
+
+                                <input type="hidden" 
+                                       class="captcha-id"
+                                       value="<?php echo $captcha->getId() ?>" 
+                                       name="<?php echo $captchaName ?>[id]">
+                            </div>
+                            <div class="col-xs-2">
+                                <a href="<?php echo $this->url('ce/captcha-reload') ?>" class="reload-captcha">
+                                    <span class="glyphicon glyphicon-refresh"></span>
+                                </a>
+                            </div>
+                        </div>                        
+                        <div class="form-group">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <div class="checkbox">
+                                    <label>
+                                        <?php echo $this->formElement($registerOrganizationForm->get('termsaccept')); ?>                                        
+                                        I agree with the <a href="<?php echo $this->url('ce/terms'); ?>" 
+                                                            target="_blank"
+                                                            title="<?php echo ucfirst($this->translate('terms & conditions')); ?>"
+                                                            ><?php echo $this->translate('terms & conditions'); ?></a>                                        
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-group--last">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <?php
+                                echo $this->formElement($registerOrganizationForm->get('submit')
+                                                ->setAttributes(array(
+                                                    'id' => 'register-form-submit-organization',
+                                                    'class' => 'btn btn-primary btn-lg',
+                                                    'value' => $this->translate('Register')
+                                )));
+                                ?>                                
+                            </div>
+                        </div>
+                        <?php echo $this->form()->closeTag(); ?>
+                    </div>
+                </div><!-- tab-content -->
+            </div><!-- tabpanel -->
+        </div><!-- col -->
+    </div><!-- row -->       
+</div><!-- container -->
+<?php
+$this->inlineScript()
+        ->appendFile($this->basePath() . '/scripts/pwstrength.js')
+        ->captureStart();
+?>
+//<script>
+    $(document).ready(function () {
+        "use strict";
+        var options = {
+            ui: {
+                container: "#participant-pwd-container",
+                verdicts: [
+                    "<?php echo $this->translate('Weak'); ?>",
+                    "<?php echo $this->translate('Normal'); ?>",
+                    "<?php echo $this->translate('Medium'); ?>",
+                    "<?php echo $this->translate('Strong'); ?>",
+                    "<?php echo $this->translate('Very Strong'); ?>"
+                ],
+                showVerdictsInsideProgressBar: true,
+                viewports: {
+                    progress: "#register-form-pwstrength-participant"
+                }
+            }
+        };
+        $('#register-form-password-participant').pwstrength(options);
+
+        options.ui.container = "#organization-admin-pwd-container";
+        options.ui.viewports.progress = "#register-form-pwstrength-organization-admin";
+
+        $('#register-form-password-organization-admin').pwstrength(options);
+    });
+//</script>    
+<?php $this->inlineScript()->captureEnd(); ?>

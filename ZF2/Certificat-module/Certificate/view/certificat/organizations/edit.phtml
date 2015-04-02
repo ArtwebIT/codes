@@ -1,0 +1,160 @@
+<?php
+$title = $this->translate('Organization profile');
+$this->headTitle($title);
+?>
+<div class="container">
+    <?php
+    $form->setAttribute('class', 'jq-validate vertical-form');
+    $form->prepare();
+
+    echo $this->form()->openTag($form);
+    ?>       
+    <div class="row title-bar">
+        <div class="col-sm-7 col-md-9 title">
+            <h2><?php echo $title; ?></h2>
+        </div>
+        <div class="col-sm-5 col-md-3 actions">
+            <?php
+            echo $this->formElement($form->get('submit')
+                            ->setAttributes(array(
+                                'class' => 'btn btn-primary btn-lg',
+                                'value' => $this->translate('Save')
+            )));
+            ?>
+            <a href="<?php echo $this->url('ce/my-organization'); ?>" class="btn btn-default btn-lg">
+                <?php echo $this->translate('Cancel'); ?>
+            </a>
+        </div>
+    </div>
+    <div class="panel panel-default panel-lg">
+        <div class="panel-body table-responsive">
+            <div class="row">              
+                <div class="col-sm-5">                   
+                    <div class="form-group">
+                        <label for="organization-profile-name"><?php echo $this->translate('Organization name'); ?></label>
+                        <?php
+                        echo $this->formElement($form->get('name')
+                                        ->setAttributes(array(
+                                            'id' => 'organization-profile-name',
+                                            'class' => 'form-control',
+                                            'placeholder' => $this->translate('Name')
+                        )));
+                        ?>
+                    </div>
+                    <div class="form-group">
+                        <label for="organization-profile-address">Address</label>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <?php
+                                echo $this->formElement($form->get('street')
+                                                ->setAttributes(array(
+                                                    'id' => 'organization-profile-address-street',
+                                                    'class' => 'form-control',
+                                                    'placeholder' => $this->translate('Street')
+                                )));
+                                ?> 
+                            </div>
+                            <div class="col-md-2">
+                                <?php
+                                echo $this->formElement($form->get('house')
+                                                ->setAttributes(array(
+                                                    'id' => 'organization-profile-address-number',
+                                                    'class' => 'form-control',
+                                                    'placeholder' => $this->translate('N°')
+                                )));
+                                ?>  
+                            </div>
+                            <div class="col-md-3">
+                                <?php
+                                echo $this->formElement($form->get('zip_code')
+                                                ->setAttributes(array(
+                                                    'id' => 'organization-profile-address-zip',
+                                                    'class' => 'form-control',
+                                                    'placeholder' => $this->translate('Zip code')
+                                )));
+                                ?> 
+                            </div>
+                            <div class="col-md-7">
+                                <?php
+                                echo $this->formElement($form->get('city')
+                                                ->setAttributes(array(
+                                                    'id' => 'organization-profile-address-city',
+                                                    'class' => 'form-control',
+                                                    'placeholder' => $this->translate('City')
+                                )));
+                                ?>  
+                            </div>
+                            <div class="col-md-5">
+                                <?php
+                                echo $this->formElement($form->get('country')->setAttributes(array(
+                                            'id' => 'register-form-country-organization',
+                                            'class' => 'form-control'
+                                )));
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="organization-profile-phone"><?php echo $this->translate('Phone'); ?></label>
+                        <?php
+                        echo $this->formElement($form->get('phone')
+                                        ->setAttributes(array(
+                                            'id' => 'organization-profile-phone',
+                                            'class' => 'form-control',
+                                            'placeholder' => $this->translate('Phone')
+                        )));
+                        ?>
+                    </div>
+                    <div class="form-group">
+                        <label for="organization-profile-website"><?php echo $this->translate('Website'); ?></label>
+                        <?php
+                        echo $this->formElement($form->get('website')
+                                        ->setAttributes(array(
+                                            'id' => 'organization-profile-website',
+                                            'class' => 'form-control',
+                                            'placeholder' => $this->translate('Website')
+                        )));
+                        ?>
+                    </div>
+                </div>
+                <div class="col-sm-offset-1 col-sm-5">
+                    <div class="form-group">
+                        <label for="organization-profile-logo"><?php echo $this->translate('Logo'); ?></label>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <input type="file" class="form-control ce-file-upload-input" id="organization-profile-logo" 
+                                       placeholder="<?php echo $this->translate('Upload your logo'); ?>"
+                                       data-empty-text="<?php echo $this->translate('Please choose file to upload'); ?>"
+                                       data-error-text="<?php echo $this->translate('An error has occurred'); ?>" />                                
+                            </div>
+                            <div class="col-md-3">
+                                <button id="organization-profile-logo-btn" class="btn btn-primary form-btn ce-file-upload-btn" type="button"
+                                        data-loading-text="<?php echo $this->translate('Wait'); ?>..." data-target="#organization-logo-img"
+                                        data-href="<?php echo $this->url('ce/files', array('action' => 'upload-logo')); ?>">
+                                            <?php echo $this->translate('Upload'); ?>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <?php echo $this->organizationLogo($organization->logo_id); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php echo $this->form()->closeTag(); ?>
+</div>
+
+<?php
+echo $this->partial('partials/_crop-modal');
+$this->headLink()->prependStylesheet($this->basePath() . '/components/imgareaselect/css/imgareaselect-default.css');
+$this->inlineScript()
+        ->appendFile($this->basePath() . '/components/imgareaselect/scripts/jquery.imgareaselect.min.js')
+        ->appendFile($this->basePath() . '/scripts/jquery.iframe-transport.js')
+        ->appendFile($this->basePath() . '/scripts/app.upload-and-crop.js');
+?>

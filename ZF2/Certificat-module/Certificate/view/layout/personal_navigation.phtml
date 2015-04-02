@@ -1,0 +1,33 @@
+<?php
+$i = 1;
+?>
+<ul aria-labelledby="user-menu" role="menu" class="dropdown-menu dropdown-menu-right">
+    <?php foreach ($this->container as $page): ?>
+        <?php if ($page->isVisible() && $this->navigation()->accept($page)): ?>  
+
+            <?php
+            $liClasses = array();
+            if ($i == 1) {
+                $liClasses[] = 'first';
+            }
+            if ($i == count($this->container)) {
+                $liClasses[] = 'last';
+            }
+            $i++;
+            ?>
+
+            <li<?php echo (count($liClasses) > 0) ? ' class="' . implode(' ', $liClasses) . '"' : '' ?>
+                role="presentation">
+                <a href="<?php echo $page->getHref(); ?>" 
+                    <?php if ($page->getId()): ?>
+                       id="<?php echo $page->getId(); ?>"
+                   <?php endif; ?>
+                   title="<?php echo $this->translate($page->getLabel()); ?>"
+                   tabindex="-1"
+                   role="menuitem">
+                       <?php echo $this->translate($page->getLabel()); ?>
+                </a>
+            </li>
+        <?php endif; ?>
+    <?php endforeach; ?>    
+</ul>

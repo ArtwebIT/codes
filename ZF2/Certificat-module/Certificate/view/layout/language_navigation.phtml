@@ -1,0 +1,13 @@
+<?php
+$menu = $this->navigation()->menu();
+?>
+<div class="lang-switch <?= $menu->getUlClass() ?>">
+    <?php foreach ($this->container as $page): ?>
+        <?php if ($page->isVisible() && $this->navigation()->accept($page)): ?>
+            <a href="<?php echo $page->getHref(); ?>" 
+               title="<?php echo $page->getLabel(); ?>" 
+               class="lang-switch--<?php echo $page->getRoute(); ?><?php echo ($this->lang() == $page->getRoute()) ? ' active' : ''; ?>">
+            </a>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</div>

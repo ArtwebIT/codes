@@ -1,0 +1,169 @@
+<?php
+$this->headTitle($title);
+?>
+<div class="container">
+    <?php
+    $form->setAttribute('class', 'jq-validate vertical-form');
+    $form->prepare();
+
+    echo $this->form()->openTag($form);
+    ?>   
+    <div class="row title-bar">
+        <div class="col-sm-7 col-md-8 title">
+            <h2><?php echo $title; ?></h2>
+        </div>
+        <div class="col-sm-5 col-md-4 actions">
+            <?php
+            echo $this->formElement($form->get('submit')
+                            ->setAttributes(array(
+                                'class' => 'btn btn-primary btn-lg',
+                                'data-loading-text' => $this->translate('Wait') . '...',
+                                'value' => $this->translate('Save')
+            )));
+            ?>
+            <a href="<?php echo $this->url('ce/templates'); ?>" 
+               class="btn btn-default btn-lg">
+                   <?php echo $this->translate('Cancel'); ?>
+            </a>
+            <?php if (isset($template)): ?>
+                <a href="#" class="btn btn-default btn-lg go-with-confirm"
+                   data-confirm-text="<?php echo $this->translate('Are you sure?'); ?>"
+                   data-loading-text="<?php echo $this->translate('Wait'); ?>..."
+                   data-href="<?php echo $this->url('ce/templates', array('action' => 'delete', 'id' => $template->id)); ?>">
+                       <?php echo $this->translate('Delete'); ?>
+                </a>         
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="panel panel-default panel-lg">
+        <div class="panel-body table-responsive">
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label for="template-name"><?php echo $this->translate('Name'); ?></label>
+                        <?php
+                        echo $this->formElement($form->get('name')
+                                        ->setAttributes(array(
+                                            'id' => 'template-name',
+                                            'class' => 'form-control',
+                                            'placeholder' => $this->translate('Template name')
+                        )));
+                        ?>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="template-type"><?php echo $this->translate('Type'); ?></label>
+                                <?php
+                                echo $this->formElement($form->get('type')
+                                                ->setAttributes(array(
+                                                    'id' => 'template-type',
+                                                    'class' => 'form-control'
+                                )));
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="template-competences"><?php echo $this->translate('Competences'); ?></label>
+                        <?php
+                        echo $this->formElement($form->get('competences')
+                                        ->setAttributes(array(
+                                            'id' => 'template-competences',
+                                            'class' => 'chosen-select form-control',
+                                            'tabindex' => '-1',
+                                            'data-placeholder' => $this->translate('Select competences')
+                        )));
+                        ?>                        
+                    </div>
+                    <div class="form-group">
+                        <label><?php echo $this->translate('Person(s) in charge'); ?></label>
+                        <div class="content-box">
+                            <table id="person-table" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th><?php echo $this->translate('Person'); ?></th>
+                                        <th><?php echo $this->translate('Function'); ?></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (count($templatePersons) > 0): ?>
+                                        <?php foreach ($templatePersons as $key => $person): ?>
+                                            <tr class="person-row">
+                                                <td class="person-name"><?php echo $person->name; ?></td>
+                                                <td class="person-function"><?php echo $person->function; ?></td>
+                                                <td class="person-actions">
+                                                    <input name="persons_in_charge[<?php echo $key; ?>][name]" 
+                                                           class="hidden-name" type="hidden"
+                                                           value="<?php echo $person->name; ?>" />
+                                                    <input name="persons_in_charge[<?php echo $key; ?>][function]" 
+                                                           class="hidden-function" type="hidden"
+                                                           value="<?php echo $person->function; ?>" />
+                                                    <a href="#" class="pull-right delete-person"
+                                                       data-confirm-text="<?php echo $this->translate('Are you sure?'); ?>"
+                                                       title="<?php echo $this->translate('Delete'); ?>">
+                                                        <span class="ico ico--delete"></span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+
+                                    <tr id="add-person-row">
+                                        <td>
+                                            <input type="text" id="add-person-name"
+                                                   class="form-control" data-rule-nohtml="1"
+                                                   placeholder="<?php echo $this->translate('Name'); ?>" />                                            
+                                        </td>
+                                        <td>
+                                            <input type="text" id="add-person-function"
+                                                   class="form-control" data-rule-nohtml="1"
+                                                   placeholder="<?php echo $this->translate('Function'); ?>" />                                            
+                                        </td>
+                                        <td class="person-actions">
+                                            <button id="add-person" class="btn btn-primary form-btn">
+                                                <?php echo $this->translate('Add'); ?>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <tr id="empty-person" class="hide">
+                                        <td class="person-name"></td>
+                                        <td class="person-function"></td>
+                                        <td class="person-actions">
+                                            <input class="hidden-name" type="hidden" />
+                                            <input class="hidden-function" type="hidden" />
+                                            <a href="#" class="pull-right delete-person"
+                                               data-confirm-text="<?php echo $this->translate('Are you sure?'); ?>"
+                                               title="<?php echo $this->translate('Delete'); ?>">
+                                                <span class="ico ico--delete"></span>
+                                            </a>
+                                        </td>
+                                    </tr>                                       
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-offset-1 col-sm-5">
+                    <form class="vertical-form">
+                        <div class="form-group">
+                            <label for="template-comment"><?php echo $this->translate('Description'); ?></label>
+                            <?php
+                            echo $this->formTextarea($form->get('additional_comment')
+                                            ->setAttributes(array(
+                                                'id' => 'template-comment',
+                                                'class' => 'form-control',
+                                                'style' => 'height: 120px;',
+                                                'placeholder' => $this->translate('Enter your comment here...')
+                            )));
+                            ?>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php echo $this->form()->closeTag(); ?>
+</div>

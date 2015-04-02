@@ -1,0 +1,27 @@
+<div id="crop-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?php echo $this->translate('Crop the image'); ?></h4>
+            </div>
+            <div class="modal-body text-center"></div>
+            <div class="modal-footer">
+                <?php
+                $cropForm->setAttribute('data-action', $this->url('ce/files', array('action' => 'crop')));
+                $cropForm->prepare();
+                echo $this->form()->openTag($cropForm);
+                echo $this->formCollection($cropForm);
+                ?>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <?php echo $this->translate('Close'); ?>
+                </button>
+                <button id="crop-do" type="button" class="btn btn-primary" data-dismiss="modal"
+                        data-loading-text="<?php echo $this->translate('Wait'); ?>...">
+                            <?php echo $this->translate('Save'); ?>
+                </button>
+                <?php echo $this->form()->closeTag(); ?>
+            </div>
+        </div>
+    </div>
+</div>

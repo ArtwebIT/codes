@@ -1,0 +1,58 @@
+<?php
+$title = $this->translate('Organizations');
+$this->headTitle($title);
+?>
+<div class="container">
+    <div class="row title-bar">
+        <div class="col-xs-12">
+            <h2><?php echo $title; ?></h2>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body table-responsive">
+            <div class="filter-bar">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <input type="search" name="search" 
+                               value="<?php echo $this->params()->fromQuery('search'); ?>" 
+                               placeholder="<?php echo $this->translate('Search'); ?>..." 
+                               class="form-control input-sm" />
+                    </div>
+                </form>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th><?php echo $this->translate('Name'); ?></th>
+                        <th><?php echo $this->translate('Country'); ?></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (count($paginator)): ?>
+                        <?php foreach ($paginator as $organization) : ?>
+                            <tr>
+                                <th scope="row">
+                                    <a href="<?php echo $this->url('ce/organizations', array('action' => 'show', 'id' => $organization['id'])); ?>" 
+                                       title="<?php echo $this->translate('Edit organization'); ?>">
+                                           <?php echo $this->escapeHtml($organization['name']); ?>
+                                    </a>
+                                </th>
+                                <td><?php echo $this->country($organization['country']); ?></td>
+                                <td class="actions">
+                                    <a href="#" 
+                                       data-href="<?php echo $this->url('ce/toggle-approve-organization', array('id' => $organization['id'])); ?>"
+                                       class="toggle-organization-approve">
+                                        <span class="glyphicon glyphicon-ok-circle text-success icon-lg<?php echo ($organization['approved'] == 1) ? ' active' : '' ?>"></span>
+                                        <span class="glyphicon glyphicon-ban-circle icon-lg<?php echo ($organization['approved'] != 1) ? ' active' : '' ?>"></span>
+                                    </a>  
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+            <?php echo $this->paginationControl($this->paginator, 'Sliding', 'paginator_slide', array('route' => 'ce/organizations', 'action' => 'index')); ?>
+        </div>
+    </div>
+</div>

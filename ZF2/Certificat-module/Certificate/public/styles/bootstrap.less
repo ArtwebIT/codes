@@ -1,0 +1,125 @@
+@import "../components/bootstrap/less/bootstrap.less";
+@import "variables.less";
+@import "mixins.less";
+
+@brand-primary:         @primary-color;
+@brand-success:         @success-color;
+@brand-info:            @primary-color;
+@brand-warning:         @warning-color;
+@brand-danger:          @alert-color;
+
+@body-bg:               @primary-color;
+@text-color:            @primary-color;
+@border-radius-base:    8px;
+@grid-gutter-width:     30px;
+
+//** Global textual link color.
+@link-color:            @secondary-color;
+//** Link hover color set via `darken()` function.
+@link-hover-color:      @secondary-color;
+
+// Typography
+
+@font-family-sans-serif:  Arial, "Helvetica Neue", Helvetica, sans-serif;
+@font-family-serif:       Georgia, "Times New Roman", Times, serif;
+//** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
+@font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
+@font-family-base:        @font-family-sans-serif;
+
+// Basics of a navbar
+@navbar-height:                    60px;
+@navbar-margin-bottom:             @line-height-computed;
+@navbar-border-radius:             0px;
+@navbar-padding-horizontal:        floor((@grid-gutter-width / 2));
+@navbar-padding-vertical:          ((@navbar-height - @line-height-computed) / 2);
+@navbar-collapse-max-height:       340px;
+
+@navbar-default-color:             @primary-color;
+@navbar-default-bg:                @primary-color-light-x3;
+@navbar-default-border:            transparent;
+
+// Navbar links
+@navbar-default-link-color:                @primary-color;
+@navbar-default-link-hover-color:          @secondary-color;
+@navbar-default-link-hover-bg:             transparent;
+@navbar-default-link-active-color:         @secondary-color;
+@navbar-default-link-active-bg:            transparent;
+@navbar-default-link-disabled-color:       @primary-color-light-x2;
+@navbar-default-link-disabled-bg:          transparent;
+
+// Navbar toggle
+@navbar-default-toggle-hover-bg:           @secondary-color;
+@navbar-default-toggle-icon-bar-bg:        @primary-color;
+@navbar-default-toggle-border-color:       @primary-color;
+
+// Buttons 
+
+@btn-font-weight:                medium;
+
+@btn-default-color:              @primary-color-light-x4;
+@btn-default-bg:                 @primary-color-light-x2;
+@btn-default-border:             transparent;
+
+@btn-primary-color:              @primary-color-light-x4;
+@btn-primary-bg:                 @secondary-color;
+@btn-primary-border:             transparent;
+
+@btn-danger-color:               @primary-color-light-x4;
+@btn-danger-bg:                  @brand-danger;
+@btn-danger-border:              transparent;
+
+.btn {
+  border: 0px;
+  .glyphicon {
+    margin-right: 10px;
+  }
+}
+
+// Panels
+
+@panel-bg:                    transparent;
+@panel-body-padding:          20px;
+@panel-heading-padding:       0px 20px 30px 20px;
+@panel-footer-padding:        20px 10px;
+@panel-border-radius:         @border-radius-base;
+
+//** Border color for elements within panels
+@panel-inner-border:          transparent;
+@panel-footer-bg:             #f5f5f5;
+
+@panel-default-text:          @text-color;
+@panel-default-border:        transparent;
+@panel-default-heading-bg:    transparent;
+
+// FORMS
+
+//** `<input>` background color
+@input-bg:                       #fff;
+//** `<input disabled>` background color
+@input-bg-disabled:              @gray-lighter;
+
+//** Text color for `<input>`s
+@input-color:                    @primary-color;
+//** `<input>` border color
+@input-border:                   @primary-color-light-x2;
+//** `<input>` border radius
+@input-border-radius:            @border-radius-base;
+//** Border color for inputs on focus
+@input-border-focus:             @primary-color-light-x1;
+
+//** Placeholder text color
+@input-color-placeholder:        @primary-color-light-x2;
+
+//** Background color for textual input addons
+@input-group-addon-bg:           @primary-color-light-x2;
+//** Border color for textual input addons
+@input-group-addon-border-color: @primary-color-light-x2;
+//== Pills
+@nav-link-hover-bg:              @primary-color-light-x2;
+
+// PROGRESS BAR
+
+//** Background color of the whole progress component
+@progress-bg:                 white;
+//** Progress bar text color
+@progress-bar-color:          #fff;

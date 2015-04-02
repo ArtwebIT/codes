@@ -1,0 +1,30 @@
+RewriteEngine On
+
+# The following rule is used to enable maintenance if the "maintenance.enable" file exists
+RewriteCond %{DOCUMENT_ROOT}/maintenance.php -f
+RewriteCond %{DOCUMENT_ROOT}/maintenance.enable -f
+RewriteCond %{SCRIPT_FILENAME} !maintenance.php
+RewriteRule ^.*$ /maintenance.php [R=503,L]
+ErrorDocument 503 /maintenance.php
+
+RewriteBase /
+# The following rule tells Apache that if the requested filename
+# exists, simply serve it.
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [NC,L]
+# The following rewrites all other queries to index.php. The
+# condition ensures that if you are using Apache aliases to do
+# mass virtual hosting, the base path will be prepended to
+# allow proper resolution of the index.php file; it will work
+# in non-aliased environments as well, providing a safe, one-size
+# fits all solution.
+RewriteCond %{REQUEST_URI}::$1 ^(/.+)(.+)::\2$
+RewriteRule ^(.*) - [E=BASE:%1]
+RewriteRule ^(.*)$ %{ENV:BASE}index.php [NC,L]
+
+SetEnv APPLICATION_ENV "development"
+
+# ignore the doc root when encrypting session data so we can share the session between eportfolio and self-assessment
+php_flag "suhosin.session.cryptdocroot" 0

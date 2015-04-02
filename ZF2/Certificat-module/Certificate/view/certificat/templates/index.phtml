@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="row title-bar">
+        <div class="col-xs-9">
+            <h2><?php echo $this->translate('Templates') ?></h2>
+        </div>
+        <div class="col-xs-3">
+            <a href="<?php echo $this->url('ce/templates', array('action' => 'new')); ?>" 
+               class="btn btn-primary btn-lg pull-right">
+                   <?php echo $this->translate('New template') ?>
+            </a>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body table-responsive">
+            <table id="table-templates" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th><?php echo $this->translate('Name') ?></th>
+                        <th><?php echo $this->translate('Type') ?></th>
+                        <th><?php echo $this->translate('Creation date') ?></th>
+                        <th><?php echo $this->translate('Author') ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (count($paginator) > 0): ?>
+                        <?php foreach ($paginator as $template): ?>
+                            <tr>
+                                <th scope="row">
+                                    <a href="<?php echo $this->url('ce/templates', array('action' => 'edit', 'id' => $template['id'])) ?>" 
+                                       title="<?php echo $template['name']; ?>">
+                                           <?php echo $template['name']; ?>
+                                    </a>
+                                </th>
+                                <td class="text-capitalize"><?php echo $template['type']; ?></td>
+                                <td><?php echo date('d-m-Y', strtotime($template['created'])); ?></td>
+                                <td><?php echo $template['user_first_name']; ?> <?php echo $template['user_last_name']; ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <th scope="row" colspan="4" class="text-center">
+                                <?php echo $this->translate('There are no templates'); ?>.
+                            </th>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+            <?php echo $this->paginationControl($paginator, 'Sliding', 'paginator_slide', array('route' => 'ce/templates', 'action' => 'index')); ?>
+        </div>
+    </div>
+</div>

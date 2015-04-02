@@ -1,0 +1,98 @@
+<?php
+$title = $this->translate('Users');
+$this->headTitle($title);
+?>
+<div class="container">
+    <div class="row title-bar">
+        <div class="col-xs-12">
+            <h2><?php echo $title ?></h2>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body table-responsive">
+            <?php
+            $form->setAttribute('action', $this->url('ce/users', array('action' => 'save-editor')));
+            $form->prepare();
+            echo $this->form()->openTag($form);
+            ?>                 
+            <table id="organization-users-table" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th><?php echo $this->translate('First name'); ?></th>
+                        <th><?php echo $this->translate('Last name'); ?></th>
+                        <th><?php echo $this->translate('E-mail'); ?></th>
+                        <th><?php echo $this->translate('Rights'); ?></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="new-editor-row">
+                        <td>
+                            <?php
+                            echo $this->formElement($form->get('first_name')
+                                            ->setAttributes(array(
+                                                'id' => 'editor-form-first-name',
+                                                'class' => 'form-control input-sm',
+                                                'placeholder' => $this->translate('First name')
+                            )));
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                            echo $this->formElement($form->get('last_name')
+                                            ->setAttributes(array(
+                                                'id' => 'editor-form-last-name',
+                                                'class' => 'form-control input-sm',
+                                                'placeholder' => $this->translate('Last name')
+                            )));
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                            echo $this->formEmail($form->get('email')
+                                            ->setAttributes(array(
+                                                'id' => 'editor-form-email',
+                                                'class' => 'form-control input-sm',
+                                                'placeholder' => $this->translate('E-mail')
+                            )));
+                            ?>
+                        </td>
+                        <td>
+                            <p class="form-control-static"><?php echo $this->translate('Editor'); ?></p>
+                        </td>
+                        <td>
+                            <?php
+                            echo $this->formElement($form->get('submit')
+                                            ->setAttributes(array(
+                                                'id' => 'editor-form-submit',
+                                                'class' => 'btn btn-primary btn-sm pull-right',
+                                                'value' => $this->translate('Add')
+                            )));
+                            ?>
+                        </td>
+                    </tr>
+                    <?php if (count($users) > 0): ?>
+                        <?php foreach ($users as $user): ?>
+                            <tr>
+                                <td><?php echo $user['first_name']; ?></td>
+                                <td><?php echo $user['last_name']; ?></td>
+                                <td><?php echo $user['email']; ?></td>
+                                <td class="text-capitalize"><?php echo $user['role']; ?></td>
+                                <td>
+                                    <?php if ($user['role'] != \Certificat\Model\UserOrganization::ROLE_ADMIN): ?>
+                                        <a href="#" title="<?php echo $this->translate('Delete'); ?>" class="pull-right go-with-confirm"
+                                           data-confirm-text="<?php echo $this->translate('Are you sure?'); ?>"
+                                           data-href="<?php echo $this->url('ce/users', array('action' => 'delete-editor', 'id' => $user['user_id'])); ?>">
+                                            <span class="ico ico--delete"></span>
+                                        </a>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+            <?php echo $this->form()->closeTag(); ?>
+        </div>
+    </div>
+</div>

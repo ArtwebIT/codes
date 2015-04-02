@@ -1,0 +1,360 @@
+<?php
+$title = $this->translate('Competences');
+$this->headTitle($title);
+$userRole = $this->layout()->userRole;
+$openedCategory = ($lastCompetence) ? $lastCompetence->category_id : null;
+?>
+
+<div class="container competence-container">
+    <div class="row title-bar">
+        <div class="col-md-6">
+            <h2><?php echo $title; ?></h2>
+        </div>
+        <?php if ($userRole == 'application_admin'): ?>
+            <!-- only available for Administrator -->
+            <div class="col-md-6">
+                <div class="dropdown pull-right page-actions">         
+                    <button id="hide-organization-competences" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="button" aria-pressed="false" 
+                            data-alt-text="<?php echo $this->translate('Show organization\'s competences'); ?>" autocomplete="off">
+                                <?php echo $this->translate('Hide organization\'s competences'); ?>
+                    </button>  
+                    <button class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <?php echo $this->translate('Add category'); ?>
+                    </button>
+                    <div class="dropdown-menu group-edit-box competence-category-new">
+                        <?php
+                        $competenceCategoryForm->reset()->setAttributes(array(
+                            'action' => $this->url('ce/competences', array('action' => 'save-category')),
+                            'id' => 'competence-category-new'
+                        ));
+                        $competenceCategoryForm->prepare();
+
+                        echo $this->form()->openTag($competenceCategoryForm);
+                        ?>                                    
+                        <div class="row group-translation">
+                            <?php foreach ($languages as $lang): ?>
+                                <div class="col-xs-2">
+                                    <span class="ct-lang"><?php echo mb_strtoupper($lang); ?></span>
+                                </div>
+                                <div class="col-xs-10">
+                                    <?php
+                                    echo $this->formElement($competenceCategoryForm->get('name_' . $lang)
+                                                    ->setAttributes(array(
+                                                        'class' => 'form-control group-name',
+                                                        'placeholder' => $this->translate('Category name')
+                                    )));
+                                    ?>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="row actions">
+                            <div class="col-md-12">
+                                <?php
+                                echo $this->formElement($competenceCategoryForm->get('submit')
+                                                ->setAttributes(array(
+                                                    'class' => 'btn btn-primary btn-sm pull-right',
+                                                    'data-loading-text' => $this->translate('Wait') . '...',
+                                                    'value' => $this->translate('Save')
+                                )));
+                                ?>
+                                <button class="btn btn-default btn-sm pull-right form-reset"><?php echo $this->translate('Cancel'); ?></button>
+                            </div>
+                        </div>
+                        <?php echo $this->form()->closeTag(); ?>
+                    </div>
+                </div>      
+            </div>
+        <?php endif; ?>
+    </div>
+    <div class="panel-group accordion" id="accordion" role="tablist" aria-multiselectable="true">
+        <?php if (count($categories)): ?>
+            <?php foreach ($categories as $category): ?>
+                <div class="panel panel-default">
+                    <div id="competence-group-title-<?php echo $category['id']; ?>" role="tab" data-toggle="collapse"
+                         class="panel-heading<?php echo ($openedCategory == $category['id']) ? '' : ' collapsed' ?>"
+                         aria-expanded="<?php echo ($openedCategory == $category['id']) ? 'true' : 'false' ?>"
+                         data-parent="#accordion" data-target="#competence-group-<?php echo $category['id']; ?>"  
+                         aria-controls="competence-group-<?php echo $category['id']; ?>">
+                        <h4 class="panel-title"><?php echo $category['name_' . $this->lang()] ?></h4>
+                        <span class="bubble"><?php echo count($category['competences']) ?></span>
+                        <span class="ico ico--arrow-down"></span>
+                        <?php if ($userRole == 'application_admin'): ?>
+                            <div class="pull-right dropdown">
+                                <a href="#" class="dropdown-toggle edit" data-toggle="dropdown" role="button" aria-expanded="false"></a>
+                                <div class="dropdown-menu group-edit-box">
+                                    <?php
+                                    $competenceCategoryForm->reset()->setData($category)->setAttributes(array(
+                                        'action' => $this->url('ce/competences', array('action' => 'save-category', 'id' => $category['id'])),
+                                        'id' => 'competence-category-' . $category['id']
+                                    ));
+                                    $competenceCategoryForm->prepare();
+
+                                    echo $this->form()->openTag($competenceCategoryForm);
+                                    ?>                                    
+                                    <div class="row group-translation">
+                                        <?php foreach ($languages as $lang): ?>
+                                            <div class="col-xs-2">
+                                                <span class="ct-lang"><?php echo mb_strtoupper($lang); ?></span>
+                                            </div>
+                                            <div class="col-xs-10">
+                                                <?php
+                                                echo $this->formElement($competenceCategoryForm->get('name_' . $lang)
+                                                                ->setAttributes(array(
+                                                                    'class' => 'form-control group-name',
+                                                                    'placeholder' => $this->translate('Category name')
+                                                )));
+                                                ?>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <div class="row actions">
+                                        <div class="col-md-12">
+                                            <?php
+                                            echo $this->formElement($competenceCategoryForm->get('submit')
+                                                            ->setAttributes(array(
+                                                                'class' => 'btn btn-primary btn-sm pull-right',
+                                                                'data-loading-text' => $this->translate('Wait') . '...',
+                                                                'value' => $this->translate('Save')
+                                            )));
+                                            ?>
+                                            <button class="btn btn-default btn-sm pull-right form-reset">
+                                                <?php echo $this->translate('Cancel'); ?>
+                                            </button>
+                                            <?php if (count($category['competences']) == 0): ?>
+                                                <a href="#" class="btn btn-warning btn-sm pull-right go-with-confirm"
+                                                   data-loading-text="<?php echo $this->translate('Wait'); ?>..."
+                                                   data-href="<?php echo $this->url('ce/competences', array('action' => 'delete-category', 'id' => $category['id'])); ?>"
+                                                   data-confirm-text="<?php echo $this->translate('You are sure?'); ?>">
+                                                       <?php echo $this->translate('Delete category'); ?>
+                                                </a>        
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                    <?php echo $this->form()->closeTag(); ?>
+                                </div>
+                            </div>                        
+                        <?php else: ?>
+                            <span class="ico ico--locker"></span>
+                        <?php endif; ?>
+                    </div>
+                    <div id="competence-group-<?php echo $category['id']; ?>"
+                         class="panel-collapse collapse<?php echo ($openedCategory == $category['id']) ? ' in' : '' ?>"
+                         aria-labelledby="competence-group-title-<?php echo $category['id']; ?>" role="tabpanel">
+                        <div class="panel-body">
+                            <div class="panel-group accordion" id="competence-accordion-<?php echo $category['id']; ?>" role="tablist" aria-multiselectable="true">
+                                <?php if (count($category['competences']) > 0): ?>
+                                    <?php foreach ($category['competences'] as $competence): ?>
+                                        <div class="panel panel-default<?php echo (is_null($competence['organization_id']) ? '' : ' custom') ?>">
+                                            <div class="panel-heading<?php echo ($lastCompetence && $lastCompetence->id == $competence['id']) ? '' : ' collapsed' ?>" 
+                                                 role="tab" data-toggle="collapse" 
+                                                 id="competence-group-title-item-<?php echo $competence['id']; ?>"
+                                                 data-parent="#competence-accordion-<?php echo $category['id']; ?>"
+                                                 aria-expanded="<?php echo ($openedCategory == $category['id']) ? 'true' : 'false' ?>"
+                                                 data-target="#competence-group-<?php echo $category['id']; ?>-item-<?php echo $competence['id']; ?>" 
+                                                 aria-controls="competence-group-<?php echo $category['id']; ?>-item-<?php echo $competence['id']; ?>">
+                                                <h5 class="panel-title">
+                                                    <?php echo $competence['name_' . $this->lang()] ?>
+                                                    <?php if ($competence['organization_name']): ?>
+                                                        <i>by <?php echo $competence['organization_name']; ?></i>
+                                                    <?php endif; ?>
+                                                </h5>
+                                                <?php if ($userRole == 'organization_admin' && $competence['organization_id'] === NULL): ?>
+                                                    <span class="ico ico--locker-blue"></span>
+                                                <?php elseif ($userRole == 'application_admin' && $competence['organization_id'] !== NULL): ?>
+                                                    <span class="ico ico--locker"></span>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div id="competence-group-<?php echo $category['id']; ?>-item-<?php echo $competence['id']; ?>" 
+                                                 class="panel-collapse collapse<?php echo ($lastCompetence && $lastCompetence->id == $competence['id']) ? ' in' : '' ?>"
+                                                 role="tabpanel" aria-labelledby="competence-group-title-item-<?php echo $competence['id']; ?>">
+                                                <div class="panel-body">  
+                                                    <div class="row competence-translation">
+                                                        <div class="col-xs-2 col-sm-1">
+                                                        </div>
+                                                        <div class="col-xs-10 col-sm-4">
+                                                            <strong><?php echo $this->translate('Name'); ?></strong>
+                                                        </div>
+                                                        <div class="col-xs-offset-2 col-sm-offset-0 col-xs-10 col-sm-7">
+                                                            <strong><?php echo $this->translate('Description'); ?></strong>
+                                                        </div>
+                                                    </div>                                                    
+                                                    <?php
+                                                    if (($userRole == 'application_admin' && $competence['organization_id'] !== NULL) ||
+                                                            ($userRole == 'organization_admin' && $competence['organization_id'] === NULL)):
+                                                        ?>
+                                                        <?php foreach ($languages as $lang): ?>
+                                                            <div class="row competence-translation">
+                                                                <div class="col-xs-2 col-sm-1">
+                                                                    <span class="ct-lang"><?php echo mb_strtoupper($lang); ?></span>
+                                                                </div>
+                                                                <div class="col-xs-10 col-sm-4">
+                                                                    <?php echo $competence['name_' . $lang]; ?>
+                                                                </div>
+                                                                <div class="col-xs-offset-2 col-sm-offset-0 col-xs-10 col-sm-7">
+                                                                    <?php echo $competence['description_' . $lang]; ?>
+                                                                </div>
+                                                            </div>                                                    
+                                                        <?php endforeach; ?>
+                                                    <?php else: ?>
+                                                        <?php
+                                                        $competenceForm->reset()->setData($competence)->setAttributes(array(
+                                                            'action' => $this->url('ce/competences', array('action' => 'save', 'id' => $competence['id'])),
+                                                            'id' => 'competence-' . $competence['id']
+                                                        ));
+                                                        $competenceForm->prepare();
+
+                                                        echo $this->form()->openTag($competenceForm);
+                                                        ?>
+                                                        <?php foreach ($languages as $lang): ?>
+                                                            <div class="row competence-translation">
+                                                                <div class="col-xs-2 col-sm-1">
+                                                                    <span class="ct-lang"><?php echo mb_strtoupper($lang); ?></span>
+                                                                </div>
+                                                                <div class="col-xs-10 col-sm-4">
+                                                                    <?php
+                                                                    echo $this->formElement($competenceForm->get('name_' . $lang)
+                                                                                    ->setAttributes(array(
+                                                                                        'class' => 'form-control ct-name',
+                                                                                        'placeholder' => $this->translate('Name')
+                                                                    )));
+                                                                    ?>
+                                                                </div>
+                                                                <div class="col-xs-offset-2 col-sm-offset-0 col-xs-10 col-sm-7">
+                                                                    <?php
+                                                                    echo $this->formElement($competenceForm->get('description_' . $lang)
+                                                                                    ->setAttributes(array(
+                                                                                        'class' => 'form-control ct-description',
+                                                                                        'placeholder' => $this->translate('Description')
+                                                                    )));
+                                                                    ?>                                                                    
+                                                                </div>
+                                                            </div>
+                                                        <?php endforeach; ?>
+                                                        <div class="row actions">
+                                                            <div class="col-md-12">
+                                                                <?php
+                                                                echo $this->formElement($competenceForm->get('submit')
+                                                                                ->setAttributes(array(
+                                                                                    'class' => 'btn btn-primary pull-right',
+                                                                                    'data-loading-text' => $this->translate('Wait') . '...',
+                                                                                    'value' => $this->translate('Save')
+                                                                )));
+                                                                ?>
+                                                                <a href="#" class="btn btn-primary pull-right go-with-confirm"
+                                                                   data-loading-text="<?php echo $this->translate('Wait'); ?>..."
+                                                                   data-href="<?php echo $this->url('ce/competences', array('action' => 'delete', 'id' => $competence['id'])); ?>"
+                                                                   data-confirm-text="<?php echo $this->translate('You are sure?'); ?>">
+                                                                       <?php echo $this->translate('Delete competence'); ?>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <?php echo $this->form()->closeTag(); ?>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>                                                    
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+
+                                <div class="panel panel-default panel-competence-new hide  <?php echo ($userRole == 'application_admin') ? '' : ' custom' ?>">
+                                    <div class="panel-heading collapsed" role="tab" data-toggle="collapse" 
+                                         id="competence-group-title-<?php echo $category['id']; ?>-item-new"
+                                         data-parent="#competence-accordion-<?php echo $category['id']; ?>"
+                                         aria-expanded="<?php echo ($openedCategory == $category['id']) ? 'true' : 'false' ?>"
+                                         data-target="#competence-group-<?php echo $category['id']; ?>-item-new" 
+                                         aria-controls="competence-group-<?php echo $category['id']; ?>-item-new">
+                                        <h5 class="panel-title">
+                                            <?php echo $this->translate('Add new competence') ?>
+                                        </h5>
+                                    </div>
+                                    <div id="competence-group-<?php echo $category['id']; ?>-item-new" 
+                                         class="panel-collapse collapse" role="tabpanel" 
+                                         aria-labelledby="competence-group-title-item-new">
+                                        <div class="panel-body">  
+                                            <div class="row competence-translation">
+                                                <div class="col-xs-2 col-sm-1">
+                                                </div>
+                                                <div class="col-xs-10 col-sm-4">
+                                                    <strong><?php echo $this->translate('Name'); ?></strong>
+                                                </div>
+                                                <div class="col-xs-offset-2 col-sm-offset-0 col-xs-10 col-sm-7">
+                                                    <strong><?php echo $this->translate('Description'); ?></strong>
+                                                </div>
+                                            </div>                                                    
+                                            <?php
+                                            $competenceForm->reset()
+                                                    ->setData(array('category_id' => $category['id']))
+                                                    ->setAttributes(array(
+                                                        'action' => $this->url('ce/competences', array('action' => 'save')),
+                                                        'id' => 'group-' . $category['id'] . '-competence-new'
+                                            ));
+                                            $competenceForm->prepare();
+
+                                            echo $this->form()->openTag($competenceForm);
+                                            echo $this->formElement($competenceForm->get('category_id'));
+                                            ?>
+                                            <?php foreach ($languages as $lang): ?>
+                                                <div class="row competence-translation">
+                                                    <div class="col-xs-2 col-sm-1">
+                                                        <span class="ct-lang"><?php echo mb_strtoupper($lang); ?></span>
+                                                    </div>
+                                                    <div class="col-xs-10 col-sm-4">
+                                                        <?php
+                                                        echo $this->formElement($competenceForm->get('name_' . $lang)
+                                                                        ->setAttributes(array(
+                                                                            'class' => 'form-control ct-name',
+                                                                            'placeholder' => $this->translate('Name')
+                                                        )));
+                                                        ?>
+                                                    </div>
+                                                    <div class="col-xs-offset-2 col-sm-offset-0 col-xs-10 col-sm-7">
+                                                        <?php
+                                                        echo $this->formElement($competenceForm->get('description_' . $lang)
+                                                                        ->setAttributes(array(
+                                                                            'class' => 'form-control ct-description',
+                                                                            'placeholder' => $this->translate('Description')
+                                                        )));
+                                                        ?>                                                                    
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                            <div class="row actions">
+                                                <div class="col-md-12">
+                                                    <?php
+                                                    echo $this->formElement($competenceForm->get('submit')
+                                                                    ->setAttributes(array(
+                                                                        'class' => 'btn btn-primary pull-right',
+                                                                        'data-loading-text' => $this->translate('Wait') . '...',
+                                                                        'value' => $this->translate('Save')
+                                                    )));
+                                                    ?>
+                                                    <button class="btn btn-primary pull-right form-reset">
+                                                        <?php echo $this->translate('Cancel'); ?>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <?php echo $this->form()->closeTag(); ?>
+                                        </div>
+                                    </div>                                                    
+                                </div>                                
+                                <div class="row actions">
+                                    <div class="col-md-12">
+                                        <button class="btn btn-primary pull-right add-competence">
+                                            <?php echo $this->translate('Add competence'); ?>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>        
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="panel panel-default">
+                <div id="no-competence-categories" class="panel-heading">
+                    <h4 class="panel-title float-none text-center"><?php echo $this->translate('There are no competences.'); ?></h4>
+                </div>     
+            </div>
+        <?php endif; ?>
+    </div>
+</div>

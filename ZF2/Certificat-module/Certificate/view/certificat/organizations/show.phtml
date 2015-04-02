@@ -1,0 +1,81 @@
+<?php
+$title = $this->translate('Organization profile');
+$this->headTitle($organization->name);
+$this->headTitle($title);
+?>
+<div class="container">
+    <div class="row title-bar">
+        <div class="col-sm-7 col-md-9 title">
+            <h2><?php echo $title; ?></h2>
+        </div>
+        <div class="col-sm-5 col-md-3 actions">
+            <a href="<?php echo $this->url('ce/organizations'); ?>" class="btn btn-default btn-lg"><?php echo $this->translate('Back'); ?></a>
+        </div>
+    </div>
+    <div class="panel panel-default panel-lg">
+        <div class="panel-body table-responsive">
+            <div class="row">              
+                <div class="col-sm-5">                   
+                    <div class="form-group">
+                        <label><?php echo $this->translate('Organization name'); ?></label>
+                        <p class="form-control-static"><?php echo $organization->name; ?></p>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label><?php echo $this->translate('Street'); ?></label>
+                                <p class="form-control-static"><?php echo $organization->street; ?></p>
+                            </div>
+                            <div class="col-md-3">
+                                <label><?php echo $this->translate('House'); ?></label>
+                                <p class="form-control-static"><?php echo $organization->house; ?></p>
+                            </div>
+                            <div class="col-md-3">
+                                <label><?php echo $this->translate('Zip Code'); ?></label>
+                                <p class="form-control-static"><?php echo $organization->zip_code; ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label><?php echo $this->translate('City'); ?></label>
+                                <p class="form-control-static"><?php echo $organization->city; ?></p>
+                            </div>
+                            <div class="col-md-6">
+                                <label><?php echo $this->translate('Country'); ?></label>
+                                <p class="form-control-static"><?php echo $this->country($organization->country); ?></p>
+                            </div>
+                        </div>
+                    </div>      
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label><?php echo $this->translate('Phone'); ?></label>
+                                <p class="form-control-static"><?php echo $organization->phone; ?></p>
+                            </div>
+                            <div class="col-md-6">
+                                <label><?php echo $this->translate('Website'); ?></label>
+                                <p class="form-control-static">
+                                    <a href="<?php echo $organization->website; ?>" target="_blank"><?php echo $organization->website; ?></a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>                      
+                </div>
+                <div class="col-sm-offset-1 col-sm-5">
+                    <div class="form-group">
+                        <label><?php echo $this->translate('Logo'); ?></label>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <?php echo $this->organizationLogo($organization->logo_id); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

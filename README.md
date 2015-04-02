@@ -1,2 +1,2 @@
 # codes
-example codes
+samples of code
